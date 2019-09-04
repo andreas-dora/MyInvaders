@@ -56,6 +56,8 @@ class Alien {
       strokeWeight(2);
       fill(80);
       ellipse(x, y, 2*r, 2*r);
+      textFont(arial, 12);
+
       textAlign(CENTER, CENTER);
       fill(255);
       text(typ, x,y);
@@ -69,6 +71,7 @@ class Alien {
       ellipse(x, y, 2*r+explRad, 2*r+explRad);
       fill(gold);
     //  textFont(f1, 24+explRad/4);
+    textFont(arial, 12);
       textAlign(CENTER);
       text(shipValue, x, y+r/2);
 

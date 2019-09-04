@@ -14,20 +14,20 @@ class Star{
   Star(){
    x = random(playGroundX, playGroundX+playGroundW);
    y = random(-height, height);
-   z = random(1, 4);
-   r = random(1, 5); 
+   z = random(0.5, 4);
+   r = random(1, 4); 
    rz = round(z*r);
-   speed = 0.02*z;
+   speed = 0.03*z;
    
    alpha = 40 * z;
   }
    Star(float y_){
    x = random(playGroundX, playGroundX+playGroundW);
    y = random(0, -height) - y_;
-   z = random(1, 4);
+   z = random(0.5, 4);
    r = random(1, 4); 
    rz = round(z*r);
-   speed = 0.02*z;
+   speed = 0.03*z;
    
    alpha = 30 * z;
   }
