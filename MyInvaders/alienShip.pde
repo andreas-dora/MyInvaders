@@ -37,7 +37,8 @@ class Alien {
     
 
   
-  void update(){
+  void update(float speed_){
+    speed = speed_;
     y = y+speed;
 
     if(!isAlive){

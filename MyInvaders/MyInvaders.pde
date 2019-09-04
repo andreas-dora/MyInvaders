@@ -47,6 +47,7 @@ String message[] = {"Press any key to start", "Get ready"};
 boolean isRunning = false;
 boolean fireEnable = false;
 boolean stearingEnable = false;
+float mySpeed = 0;
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 void setup(){
@@ -100,7 +101,8 @@ void draw(){
     case 0: //---- has not begun
     fireEnable = false;
     stearingEnable = false; 
-    messageBox(0);    
+    messageBox(0);   
+    mySpeed = 0;
     break;
     
     case 1: //-------- Countdown
@@ -121,7 +123,8 @@ void draw(){
     case 2: //------------ Running
     fireEnable = true;
     isRunning = true;   
-    stearingEnable = true;  
+    stearingEnable = true; 
+    mySpeed = 0.1;
     if(timer.isFinished()){
       timeBonus -=1;
     }
@@ -132,6 +135,7 @@ void draw(){
     case 3: //------------------ Level Complete
     countDown += 10;  
     level +=1;
+    mySpeed = 0;
     caseNumber +=1;// ALles Feuer wird Rückwerts gelöscht
             // Feuer deaktiviert
             // Lenkung bleibt aktiv;
@@ -211,7 +215,7 @@ void draw(){
   
   
   for(Alien al : alien){
-    al.update();
+    al.update(mySpeed);
     al.show();
   }
 
