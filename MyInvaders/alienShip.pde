@@ -4,7 +4,7 @@ class Alien {
   float x;
   float y;
   float r;
-  float speed = 0.1;
+  float speed = 0.2;
   float explRad = 1; //(ExplosionRAdius)
   int test = 0;
   boolean isDead = false;
@@ -19,7 +19,7 @@ class Alien {
   }
   
   boolean intersec(Fire other) {
-    float d = dist(x, y, other.x, other.y);
+    float d = dist(x, y, other.location.x, other.location.y);
     if (d < r + other.r) {
       return true;
     } else {

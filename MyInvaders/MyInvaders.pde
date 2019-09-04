@@ -21,23 +21,34 @@ color deeppink = #FF1493;
 color gold = #FFD700;
 color silver = #C0C0C0;
 color alienColor[] = {#FF320A, #7CFC00, #00FFFF};
-int alienR;
-int abstand;
-int shipR;
+
+
+//----------------------SPIELFELD
 int playGroundX;
 int playGroundY;
 int playGroundW;
 int playGroundH;
 
-int offset = 5;
+//----------------------ALIENS
 int cols = 2;
 int rows = 7;
+int alienR;
+
+
+int abstand;
+
+int shipR;
+
+
+int offset = 5;
+
+//-----------------------SPIEL
 int punkte;
 int timeBonus = 100;
 int bonus;
 int countDown = 5;
 int caseNumber;
-  int firstStars = 50;
+int firstStars = 50;
 int firstStarCounter;
 int level = 1;
 
@@ -53,10 +64,10 @@ float mySpeed = 0;
 void setup(){
   size(1080, 640);
   firstStarCounter = firstStars;
-  playGroundX = width/2 - height/2 - offset;
-  playGroundY = offset;
-  playGroundW = height - 2*offset;
-  playGroundH = height - 2*offset;
+  playGroundX = width/2 - height/2; 
+  playGroundY = 0;
+  playGroundW = height;
+  playGroundH = height;
   arial = createFont("Arial", 36);
   alienR = floor(height/36);
   // 
@@ -64,8 +75,6 @@ void setup(){
   println(shipR + "from Setup");
   
   abstand = floor(height/20);
-//  play = floor((width-height)/2);
-  println("alienR: " + alienR + "   abstand: " + abstand + "   feldX: " + playGroundX);
 
   oneShip = new ArrayList<Ship>();
   oneShip.add(new Ship(shipR, playGroundX, playGroundX+height));
@@ -89,24 +98,23 @@ void setup(){
   fastTimer = new Timer(100);
   fastTimer.start();
 }
-
+//--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
 void draw(){
   background(0,10,30);
   strokeWeight(1);
-  //line(width/2, 0, width/2, height);
   fill(0,0,0);
   rect(playGroundX, playGroundY, playGroundW, playGroundH);
   
   switch (caseNumber){  
-    case 0: //---- has not begun
+    case 0:                   //---------- has not begun
     fireEnable = false;
     stearingEnable = false; 
     messageBox(0);   
     mySpeed = 0;
     break;
     
-    case 1: //-------- Countdown
-//    int cD = countDown;
+    case 1:                   //-------- Countdown
     fireEnable = false;
     stearingEnable = true;   
     if(timer.isFinished()){
@@ -116,8 +124,6 @@ void draw(){
     caseNumber = 2;
     }
     messageBox(countDown);      
-    //}
-  
     break;
     
     case 2: //------------ Running
@@ -128,71 +134,50 @@ void draw(){
     if(timer.isFinished()){
       timeBonus -=1;
     }
-    
-            
     break; 
     
     case 3: //------------------ Level Complete
     countDown += 10;  
     level +=1;
     mySpeed = 0;
-    caseNumber +=1;// ALles Feuer wird Rückwerts gelöscht
-            // Feuer deaktiviert
-            // Lenkung bleibt aktiv;
-            // Bonus Sekunden werden gut geschrieben
-            // Level += 1;
-            // weiter zu case 1 (Countdown);
-            
-     break;
-     
-     case 4: //Player Down
- 
-      fireEnable = false;
-      stearingEnable = true; 
-      bonus = timeBonus * 100;
-      punkte = punkte + bonus;
-      messageBox(bonus);
-      if(timer.isFinished()){
-        countDown -=1;
+    caseNumber +=1;
+    break;
+    
+    case 4:                //------------------ Next Level
+    fireEnable = false;
+    stearingEnable = true; 
+    bonus = timeBonus * 100;
+    punkte = punkte + bonus;
+    messageBox(bonus);
+    if(timer.isFinished()){
+      countDown -=1;
       }
-      if(countDown ==6){
-        caseNumber = 1;
-      }
-      alien = new ArrayList<Alien>();
-  for (int j = 0; j < cols+level; j++){
-    for(int i = 0; i <rows-j; i++){
-      int k = i%2;
+     if(countDown ==6){
+       caseNumber = 1;
+     }
+    alien = new ArrayList<Alien>();
+    for (int j = 0; j < cols+level; j++){
+      for(int i = 0; i <rows-j; i++){
+        int k = i%2;
         alien.add(new Alien((width - ((2*alienR+abstand)*(rows-j)-(2*alienR+abstand)))/2 +(2*alienR+abstand)*i,2*offset+alienR+(2*alienR+abstand)*j, alienR, k));
+      }
     }
-  }
-    
-             // Feuer sperren, Feuer löschen 
-             // If Schiffe > 0{
-             // Schiffe - 1;
-             //  weiter mit Case 1;
-             // } else {             
-             // weiter mit Case 5;
-      break;
+    break;
              
-      case 5:    // -- Game OVer
-                 // If Highscore
-                 // else case 0;
-      fireEnable = false;
-    
-      break;
-             }
+    case 5:                          // -- -----------------Player Down
+    fireEnable = false;
+    break;
+  }
   
-  // spielfeld
-  stroke(255);
-  noFill();
-
+  
+  
+  // --------------------------------
+  // -------------------------------- Anzeige
   textFont(arial, 24);
-  punkteString = nf(punkte, 6,0);
   textAlign(LEFT);
   fill(255);
-      text("LEVEL: " + level, offset, abstand);
-
-  text("SCORE: "+punkteString, offset,2*abstand);
+  text("LEVEL: " + level, offset, abstand);
+  text("SCORE: "+nf(punkte, 6,0), offset,2*abstand);
   text("TIME BONUS: "+timeBonus, offset,3*abstand);
 
   textAlign(RIGHT);
@@ -200,8 +185,10 @@ void draw(){
   text("oneFire: " + oneFire.size(), width-2*offset, 2*abstand);
   text("FirstStars: " + firstStarCounter, width-2*offset, 3*abstand);
   text("CaseNumber: " + caseNumber, width-2*offset, 4*abstand);
-    text("countDown: " + countDown, width-2*offset, 5  *abstand);
+  text("countDown: " + countDown, width-2*offset, 5  *abstand);
+//-----------------------------------------------------------------
 
+//----------------------------- BACKGROUND
   for(int i = star.size()-1; i >= 0; i--){
     Star sta = star.get(i);
     sta.upDate(mouseX);
@@ -219,6 +206,7 @@ void draw(){
     al.show();
   }
 
+
   for(Ship sh1 : oneShip){
     sh1.show(mouseX);
     if(stearingEnable){
@@ -226,9 +214,8 @@ void draw(){
     } else {
     sh1.upDate(width/2);
     }
-      
-
   }
+ 
   
   for(Fire fire1 : oneFire){
     fire1.upDate();
@@ -243,14 +230,11 @@ void draw(){
       if(alien.size() == 0){
         isRunning = false;
         caseNumber = 3;
-     //   levelUp();
       }
-    
-  }
+    }
     
     for(int j = oneFire.size()-1; j >= 0; j--){
       Fire fire1 = oneFire.get(j);
-
       if(aSh.intersec(fire1)){
         oneFire.remove(j);
         aSh.explode();
@@ -260,9 +244,9 @@ void draw(){
   
   for(int i = oneFire.size()-1; i >= 0; i--){
     Fire fire1 = oneFire.get(i);
-      if(fire1.isDone){
-        oneFire.remove(i);
-      }
+    if(fire1.isDone){
+      oneFire.remove(i);
+    }
   }
 
   
@@ -272,48 +256,16 @@ void draw(){
   }  
   if(fastTimer.isFinished()){    
     fastTimer.start();
-  }  
-
-  
+  }   
 }
 
-//void countDownFunction(int cD){
-//    timer.start(1000);
-//    if(timer.isFinished()){
-//      println("PENG from coundDownFunction");
-//      cD-=1;
-//      if(cD >0){
-//        timer.start(1000);
-//      }
-//    }
-//     if(cD == 0){
-//       caseNumber = 2;
-//     }
-//         messageBox(str(cD));    
-
-//    }
-  
-
-
+//-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
 void keyPressed(){
  if(caseNumber == 0){
    caseNumber = 1;
  }
-  
 }
-  //if(keyCode == 38){
-  //  alien.add(new Alien());
-  //  println(alien.size());
-  //} else 
-  
-  
-  //if((keyCode == 39)&&(alien.size() >0)){
-  //   int i = int(random(alien.size()));
-  //   println(i);
-  //   alien.remove(i);
-     
-  //}
-
 
 void mousePressed(){
   if(fireEnable){
