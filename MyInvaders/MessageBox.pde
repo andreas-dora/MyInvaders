@@ -17,7 +17,7 @@ void messageBox(int velue2){
     break;
     
     case 1: //-------- Countdown
-    zeile1 = "GET REDY!";
+    zeile1 = "GET READY!";
     zeile2 = "";
    
     break;
@@ -40,6 +40,30 @@ void messageBox(int velue2){
             // weiter zu case 1 (Countdown);
             
      break;  
+      case 5: //------------------ Level Complete
+    zeile1 = "ARE YOU BLIND?";
+    zeile2 = "";
+     
+            // ALles Feuer wird Rückwerts gelöscht
+            // Feuer deaktiviert
+            // Lenkung bleibt aktiv;
+            // Bonus Sekunden werden gut geschrieben
+            // Level += 1;
+            // weiter zu case 1 (Countdown);
+            
+     break;
+        case 6: //------------------ Level Complete
+    zeile1 = "GAME OVER";
+    zeile2 = "";
+     
+            // ALles Feuer wird Rückwerts gelöscht
+            // Feuer deaktiviert
+            // Lenkung bleibt aktiv;
+            // Bonus Sekunden werden gut geschrieben
+            // Level += 1;
+            // weiter zu case 1 (Countdown);
+            
+     break;
   }
 
     strokeWeight(10);

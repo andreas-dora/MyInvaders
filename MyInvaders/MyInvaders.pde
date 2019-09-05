@@ -24,8 +24,8 @@ color silver = #C0C0C0;
 color myOrange = color(255,50,10);
 color green = color(0, 200, 50);
 color alienColor[] = {#FF320A, #7CFC00, #00FFFF};
-
-
+color goldenRod = #DAA520;
+color dodgerBlue = #1E90FF;  
 //----------------------SPIELFELD
 int playGroundX;
 int playGroundY;
@@ -43,19 +43,20 @@ int shootingSpeed = 1000;
 int abstand;
 
 int shipR;
-
-
+int shipY;
+int level = 1;
+int shipsOne = 2;
 int offset = 5;
 
 //-----------------------SPIEL
-int punkte;
+int score;
 int timeBonus = 100;
 int bonus;
 int countDown = 5;
 int caseNumber;
 int firstStars = 50;
 int firstStarCounter;
-int level = 1;
+
 
 
 String punkteString;
@@ -71,18 +72,17 @@ void setup(){
   size(1080, 640);
   firstStarCounter = firstStars;
   playGroundX = width/2 - height/2; 
-  playGroundY = 0;
-  playGroundW = height;
-  playGroundH = height;
-  arial = createFont("Arial", 36);
-  alienR = floor(height/36);
+
+  arial = createFont("Arial-Black", 36);
+  alienR = floor(height/32);
+  shipY = height - floor(height/16);
   // 
   shipR = floor(height/30);
   println(shipR + "from Setup");
   
   abstand = floor(height/20);
 
-  oneShip = new Ship(shipR, height - 2*shipR, gold);
+  oneShip = new Ship(shipR, shipY, gold);
   
   oneFire = new ArrayList<Fire>();
   alienFire = new ArrayList<Fire>();
@@ -110,6 +110,7 @@ void setup(){
 void draw(){
   background(0,10,30);
   strokeWeight(1);
+  noStroke();
   fill(0,0,0);
   rect(playGroundX, 0, height, height);
   
@@ -121,7 +122,11 @@ void draw(){
     mySpeed = 0;
     break;
     
-    case 1:                   //-------- Countdown
+    case 1:  //-------- Countdown
+
+    shipY = height - floor(height/16);
+    oneShip.isDead = false;
+    oneShip.isAlive = true;
     fireEnable = false;
     stearingEnable = true; 
     timeBonus = 100;
@@ -165,26 +170,57 @@ void draw(){
     }
     if((fastTimer.isFinished())&&(timeBonus> 0)){
       timeBonus -=1;
-      punkte += 100;
+      score += 100;
     }
     if(timeBonus ==0){
       caseNumber = 1;
     }
-    //bonus = timeBonus * 100;
-    //punkte = punkte + bonus;
-    //messageBox(timeBonus);
-    //if(timer.isFinished()){
-    //  countDown -=1;
-    //  }
-    // if(countDown ==6){
-    //   caseNumber = 1;
-
+     messageBox(timeBonus);   
    
+      countDown = 3;
 
     break;
              
     case 5:                          // -- -----------------Player Down
     fireEnable = false;
+    for(int i = alienFire.size()-1; i >= 0; i--){  
+    //  Fire fiA = alienFire.get(i);
+      alienFire.remove(i);
+    }
+        shipY = 800;
+    mySpeed = 0.0;
+    messageBox(-1);   
+
+    if(timer.isFinished()){
+      countDown-=1;
+    }
+    if((countDown == 0)&&(shipsOne > 0)){
+        shipsOne -=1;
+        caseNumber =2;
+      } else {
+        countDown = 3;
+        caseNumber = 6;
+            
+      ///  }
+      
+    
+    }
+
+    break;
+    case 6:
+    fireEnable = false;
+    
+    if(timer.isFinished()){ 
+      countDown-=1;
+      if( countDown ==0){
+        
+        caseNumber = 0;
+      }
+    }
+        
+      
+      messageBox(-1);   
+  
     break;
   }
   
@@ -192,21 +228,8 @@ void draw(){
   
   // --------------------------------
   // -------------------------------- Anzeige
-  textFont(arial, 24);
-  textAlign(LEFT);
-  fill(255);
-  text("LEVEL: " + level, offset, abstand);
-  text("SCORE: "+nf(punkte, 6,0), offset,2*abstand);
-  text("TIME BONUS: "+timeBonus, offset,3*abstand);
 
-  textAlign(RIGHT);
-  text("x/y: " + mouseX + " / " + mouseY, width-2*offset, abstand);
-  text("oneFire: " + oneFire.size(), width-2*offset, 2*abstand);
-  text("FirstStars: " + firstStarCounter, width-2*offset, 3*abstand);
-  text("CaseNumber: " + caseNumber, width-2*offset, 4*abstand);  
-  text("shootingSpeed: " + shootingSpeed, width-2*offset, 5  *abstand);
-  text("countDown: " + countDown, width-2*offset, 6  *abstand);
-
+  display(goldenRod);
 //-----------------------------------------------------------------
 
 //----------------------------- BACKGROUND
@@ -224,10 +247,12 @@ void draw(){
  
   oneShip.show(mouseX); 
   if(stearingEnable){
-    oneShip.upDate(mouseX);
+    oneShip.upDate(mouseX,shipY);
   } else{ 
-    oneShip.upDate(width/2);
+    oneShip.upDate(width/2, shipY);
   }
+ 
+ 
  
   for(Alien al : alien){
     al.update(mySpeed);
@@ -246,17 +271,26 @@ void draw(){
     afi.show();
   }
   
-  
+  for(int i = alienFire.size()-1; i >= 0; i--){  
+          Fire fiA = alienFire.get(i);
+
+      if(oneShip.intersec(fiA)){
+        alienFire.remove(i);
+        oneShip.explode();
+        caseNumber= 5;
+      }
+  }
   for( int i = 0; i <alien.size(); i++){
     Alien aSh = alien.get(i);
     if(aSh.isDead){
-      punkte +=aSh.shipValue;
+      score +=aSh.shipValue;
       alien.remove(i);
       if(alien.size() == 0){
         isRunning = false;
         caseNumber = 3;
       }
     }
+
     
     for(int j = oneFire.size()-1; j >= 0; j--){
       Fire fire1 = oneFire.get(j);
@@ -264,15 +298,17 @@ void draw(){
         oneFire.remove(j);
         aSh.explode();
       }
+     if(fire1.isDone){
+      oneFire.remove(j);
     }
   }
-  
-  for(int i = oneFire.size()-1; i >= 0; i--){
-    Fire fire1 = oneFire.get(i);
-    if(fire1.isDone){
-      oneFire.remove(i);
-    }
-  }
+  } 
+  //for(int i = oneFire.size()-1; i >= 0; i--){
+  //  Fire fire1 = oneFire.get(i);
+  //  if(fire1.isDone){
+  //    oneFire.remove(i);
+  //  }
+  //}
 
   
  
@@ -289,16 +325,14 @@ void draw(){
       Alien aSh = alien.get(i);
       //for( int j = 0; j <alien.size(); j++){
       //  Alien jSh = alien.get(i);  
-        if((aSh.hasTarget(oneShip.x, oneShip.r))&&(fireEnable)){         //---------------||(aSh.clearRange(jSh))){
+        if((aSh.hasTarget(oneShip.location.x, oneShip.r))&&(fireEnable)){         //---------------||(aSh.clearRange(jSh))){
           println("PENG");
           aSh.shoot();
         //}
       }
     }
     shootingTimer.start();
-  }
-
-  
+  }  
 }
 
 
@@ -313,7 +347,42 @@ void keyPressed(){
 void mousePressed(){
   println(playGroundX, playGroundX+height) ; 
   if(fireEnable){
-    oneFire.add(new Fire(oneShip.x, oneShip.y, -0.15, deeppink));
+    oneFire.add(new Fire(oneShip.location.x, oneShip.location.y, -0.15, deeppink));
   }
 }
   
+void display(color c){
+  int tx = 2*offset;
+  int ty =4 *offset;
+  int zeile = 30;
+  stroke(c);
+  strokeWeight(2);
+  noFill();
+  rect(offset, offset, width/2-height/2-offset, height - 2*offset);
+  textFont(arial, 32);
+  textAlign(LEFT,TOP);
+  fill(c);
+  text("PLAYER ONE ", 2*offset, 2*offset);
+    textFont(arial, 23);
+
+  text("LEVEL: " + level, tx, ty +zeile);
+  text("SHIPS: "+nf(shipsOne, 2,0), tx, ty +2* zeile);
+
+  text("SCORE: ", tx, ty +3* zeile);
+  textAlign(RIGHT,TOP);
+  text(nf(score, 6,0), width/2-height/2-offset, ty +3* zeile);
+  textAlign(LEFT,TOP);
+  text("TIMEBONUS: ", tx,ty +4* zeile);
+
+    textAlign(RIGHT,TOP);
+  text(timeBonus, width/2-height/2-offset,ty +4* zeile);
+
+
+  textAlign(RIGHT);
+  text("x/y: " + mouseX + " / " + mouseY, width-2*offset, abstand);
+  text("fire.size: " + oneFire.size() + " / " + alienFire.size(), width-2*offset, 2*abstand);
+  text("FirstStars: " + firstStarCounter, width-2*offset, 3*abstand);
+  text("CaseNumber: " + caseNumber, width-2*offset, 4*abstand);  
+  text("shootingSpeed: " + shootingSpeed, width-2*offset, 5  *abstand);
+  text("countDown: " + countDown, width-2*offset, 6  *abstand);
+}

@@ -23,24 +23,40 @@ class Ship{
     acceleration = new PVector(0,0);
   }
 
-  void upDate(float updateX_){
-    updateX=constrain(updateX_,  playGroundX+r, playGroundX+height-r);
-    if(x+5 < updateX){
-      x +=4;
-    } else if(x-5 > updateX){
-      x -=4;
+  void upDate(float mx, float y_){
+    location.y = y_;
+    location.x=constrain(mx,  playGroundX+r, playGroundX+height-r);
+    if(location.x+5 < mx){
+      velocity.x +=4;
+    } else if(location.x-5 > mx){
+      velocity.x -=4;
+    } else {
+      velocity.x = 0;
     }
-    x = constrain(x, playGroundX+r, playGroundX+height-r);
     
+ 
+    location.add(velocity);
+    location.x = constrain(location.x, playGroundX+r, playGroundX+height-r);
+
     if(!isAlive){
-      if(explRad < 70){
+      if(explRad < 100){
         explRad +=1;
       } else {
         isDead = true;
+        caseNumber = 5;
       }
     }
   }
   
+  boolean intersec(Fire other) {
+    float d = dist(location.x, location.y, other.location.x, other.location.y);
+    if (d < r + other.r) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+ 
   void show(float mx){
     if(mx < x - 2*r){
       antriebR = 255;
@@ -55,49 +71,50 @@ class Ship{
       
     if(isAlive){
 
-     for (int i = 0; i<8; i++) { // ---------- rechtes Triebwerk
-      noStroke(); 
-      fill(deeppink, antriebR-(i*10));
-      rect(x-4+1*i, y+i*5, 30-i*2,5);
+     //for (int i = 0; i<8; i++) { // ---------- rechtes Triebwerk
+     // noStroke(); 
+     // fill(deeppink, antriebR-(i*10));
+     // rect(x-4+1*i, y+i*5, 30-i*2,5);
       
-     }
+     //}
      
      
-     for (int i = 0; i<8; i++) { // Linkes Triebwerk
-      noStroke(); 
-      fill(deeppink, antriebL-(i*10));
-      rect(x-r+1*i, y+i*5, 30-i*2,5);
-     }
-     
-      stroke(0);
-      fill(0);
-      ellipse(x, y, 2*r+4, 2*r+4);
+     //for (int i = 0; i<8; i++) { // Linkes Triebwerk
+     // noStroke(); 
+     // fill(deeppink, antriebL-(i*10));
+     // rect(x-r+1*i, y+i*5, 30-i*2,5);
+     //}
+           strokeWeight(2);
 
-      stroke(c);
-      strokeWeight(3);
-      ellipse(x, y, 2*r, 2*r);
-      ellipse(x, y, r, r);
+      stroke(100);
+      fill(#6A5ACD);
+      ellipse(location.x, location.y, 2*r+4, 2*r+4);
+
+      stroke(#F0E68C);
+      ellipse(location.x, location.y, 2*r, 2*r);
+      ellipse(location.x, location.y, r, r);
       noStroke();
       
 
     } else { 
-      stroke(deeppink);
-      strokeWeight(2);
-      fill(deeppink);
-      ellipse(x, y, 2*r-explRad/3, 2*r-explRad/3);
-      noFill();
-      ellipse(x, y, 2*r+explRad/2, 2*r+explRad/2);
-      ellipse(x, y,  r+explRad, r+explRad);
-      ellipse(x, y, 2*r+explRad, 2*r+explRad);
-      
-     // fill(gold);
-      //textFont(f1, 24+explRad/4);
-      //textAlign(CENTER);
-      //text("A", x, y+r/2);
+ 
+       recurseShip(r);
 
-    }
+    }      
   }
+
+
   
+  
+  void recurseShip(float r_){
+    stroke(deeppink);
+    fill(0);
+    ellipse(location.x, location.y, 2*r_+ +explRad, 2*r_+explRad*1.2);
+    if( r_ > 2){
+     r_ *=0.60;
+     recurseShip(r_);
+   }
+  }
     void explode(){
     isAlive = false;
   } 
