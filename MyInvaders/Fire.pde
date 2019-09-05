@@ -43,7 +43,11 @@ class Fire {
    ellipse(x_, y_, 2*r, 2*r);
    if( a > 15){
      a *=0.80;
-     recurseFire(x_, y_+r, a);
+     if(acceleration.y<0){  
+       recurseFire(x_, y_+r, a);
+     } else {
+       recurseFire(x_, y_-r, a);
+     }
    }
   }
 }

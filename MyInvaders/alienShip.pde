@@ -111,12 +111,13 @@ class Alien {
       //ellipse(location.x,location.y, 2*r+explRad/2, 2*r+explRad/2);
       //ellipse(location.x, location.y,  r+explRad, r+explRad);
       //ellipse(location.x, location.y, 2*r+explRad, 2*r+explRad);
-      fill(gold);
+
+      recurseShip(r);
+            fill(gold);
      // textFont(f1, 24+explRad/4);
-    textFont(arial, 16);
+    textFont(arial, 20);
       textAlign(CENTER);
       text(shipValue, location.x, location.y+r/2);
-      recurseShip(r);
     }      
   }
 

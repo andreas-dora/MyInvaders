@@ -90,8 +90,8 @@ void setup(){
   alien = new ArrayList<Alien>();
   for (int j = 0; j < cols+level; j++){
     for(int i = 0; i <rows-j; i++){
-      int k = i%2;
-        alien.add(new Alien((width - ((2*alienR+abstand)*(rows-j)-(2*alienR+abstand)))/2 +(2*alienR+abstand)*i,2*offset+alienR+(2*alienR+abstand)*j, alienR, k));
+      int k = i%3;
+        alien.add(new Alien((width - ((2*alienR+abstand)*(rows-j)-(2*alienR+abstand)))/2 +(2*alienR+abstand)*i,2*offset+alienR-(2*alienR+abstand)*j, alienR, k));
     }
   }
   
@@ -101,7 +101,7 @@ void setup(){
   }
   timer = new Timer(1000);
   timer.start();
-  fastTimer = new Timer(100);
+  fastTimer = new Timer(20);
   fastTimer.start();
   shootingTimer = new Timer(shootingSpeed);
 }
@@ -123,7 +123,8 @@ void draw(){
     
     case 1:                   //-------- Countdown
     fireEnable = false;
-    stearingEnable = true;   
+    stearingEnable = true; 
+    timeBonus = 100;
     if(timer.isFinished()){
       countDown-=1;
     }
@@ -154,22 +155,32 @@ void draw(){
     case 4:                //------------------ Next Level
     fireEnable = false;
     stearingEnable = true; 
-    bonus = timeBonus * 100;
-    punkte = punkte + bonus;
-    messageBox(bonus);
-    if(timer.isFinished()){
-      countDown -=1;
-      }
-     if(countDown ==6){
-       caseNumber = 1;
-     }
+    countDown = 5;
     alien = new ArrayList<Alien>();
     for (int j = 0; j < cols+level; j++){
       for(int i = 0; i <rows-j; i++){
-        int k = i%2;
-        alien.add(new Alien((width - ((2*alienR+abstand)*(rows-j)-(2*alienR+abstand)))/2 +(2*alienR+abstand)*i,2*offset+alienR+(2*alienR+abstand)*j, alienR, k));
+        int k = i%3;
+        alien.add(new Alien((width - ((2*alienR+abstand)*(rows-j)-(2*alienR+abstand)))/2 +(2*alienR+abstand)*i,2*offset+alienR-(2*alienR+abstand)*j, alienR, k));
       }
     }
+    if((fastTimer.isFinished())&&(timeBonus> 0)){
+      timeBonus -=1;
+      punkte += 100;
+    }
+    if(timeBonus ==0){
+      caseNumber = 1;
+    }
+    //bonus = timeBonus * 100;
+    //punkte = punkte + bonus;
+    //messageBox(timeBonus);
+    //if(timer.isFinished()){
+    //  countDown -=1;
+    //  }
+    // if(countDown ==6){
+    //   caseNumber = 1;
+
+   
+
     break;
              
     case 5:                          // -- -----------------Player Down
