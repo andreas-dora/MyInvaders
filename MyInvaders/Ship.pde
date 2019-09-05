@@ -2,31 +2,31 @@ class Ship{
   float x;
   float y;
   float r;
-  float mini;
-  float maxi;
   float updateX;
   float explRad = 1;
   boolean isDead = false;
   boolean isAlive = true;
   int antriebR = 150;
   int antriebL = 150;
+  color c;
   
-  Ship( float r_, float mini_, float maxi_){
+  Ship( float r_, float y_, color c_){
     x = width/2;
-    y = height - 2*r_;
+    y = y_;
     r = r_;
-    mini = mini_+ r_;
-    maxi = maxi_  - 2*r_;
+    c = c_;
+
   }
 
   void upDate(float updateX_){
-    updateX=constrain(updateX_,  mini, maxi);
+    updateX=constrain(updateX_,  playGroundX+r, playGroundX+height-r);
     if(x+5 < updateX){
       x +=4;
     } else if(x-5 > updateX){
       x -=4;
     }
-    x = constrain(x, mini, maxi);
+    x = constrain(x, playGroundX+r, playGroundX+height-r);
+    
     if(!isAlive){
       if(explRad < 70){
         explRad +=1;
@@ -55,7 +55,6 @@ class Ship{
       fill(deeppink, antriebR-(i*10));
       rect(x-4+1*i, y+i*5, 30-i*2,5);
       
-     // ellipse(x+r-3, y+i*7, 10,6);
      }
      
      
@@ -69,7 +68,7 @@ class Ship{
       fill(0);
       ellipse(x, y, 2*r+4, 2*r+4);
 
-      stroke(gold);
+      stroke(c);
       strokeWeight(3);
       ellipse(x, y, 2*r, 2*r);
       ellipse(x, y, r, r);

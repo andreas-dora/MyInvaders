@@ -43,11 +43,11 @@ void messageBox(int velue2){
   }
 
     strokeWeight(10);
-  stroke(240, 100, 0);
+  stroke(myOrange);
   rect(300,200, w, h);
   textFont(arial, 36);
   textAlign(CENTER,CENTER);
-  fill(240, 100, 0);
+  fill(myOrange);
   text(zeile1, x+w/2, y+h/2); 
   text(zeile2+  " " + velue2 , x+w/2, y+h/2+30); 
   

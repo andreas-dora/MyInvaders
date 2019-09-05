@@ -20,6 +20,7 @@ Timer fastTimer;
 color deeppink = #FF1493;
 color gold = #FFD700;
 color silver = #C0C0C0;
+color myOrange = color(255,50,10);
 color alienColor[] = {#FF320A, #7CFC00, #00FFFF};
 
 
@@ -77,7 +78,7 @@ void setup(){
   abstand = floor(height/20);
 
   oneShip = new ArrayList<Ship>();
-  oneShip.add(new Ship(shipR, playGroundX, playGroundX+height));
+  oneShip.add(new Ship(shipR, height - 2*shipR, gold));
   
   oneFire = new ArrayList<Fire>();
   
@@ -104,7 +105,7 @@ void draw(){
   background(0,10,30);
   strokeWeight(1);
   fill(0,0,0);
-  rect(playGroundX, playGroundY, playGroundW, playGroundH);
+  rect(playGroundX, 0, height, height);
   
   switch (caseNumber){  
     case 0:                   //---------- has not begun
@@ -268,9 +269,12 @@ void keyPressed(){
 }
 
 void mousePressed(){
+  println(playGroundX, playGroundX+height) ; 
+
   if(fireEnable){
     for(Ship ship : oneShip){
       oneFire.add(new Fire(ship.x));
     }
-  }
+}
+  
 }
