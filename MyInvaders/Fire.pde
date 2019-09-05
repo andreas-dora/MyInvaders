@@ -8,13 +8,14 @@ class Fire {
   PVector velocity;
   PVector acceleration;
   float topSpeed =5;
+  float alpha = 255;
 
   Fire(float x_) {    
     x = x_;
     y = height-(shipR+offset)*2;
     location = new PVector(x,y);
     velocity = new PVector(0,0);
-    acceleration = new PVector(0,-0.1);
+    acceleration = new PVector(0,-0.15);
   }
 
   void upDate(){
@@ -25,24 +26,21 @@ class Fire {
       isDone = true;
     }
   }
-    
-  //  y +=speed;
-  //  if (y<0) {
-  //    isDone = true;
-  //  }
-  //} 
 
   void show(){
     noStroke();
-    fill(deeppink);   
-    ellipse(location.x, location.y, 2*r, 2*r);
+    fill(deeppink); 
+    recurseFire(location.x, location.y, alpha);
+  }
+  
+ void recurseFire(float x_, float y_, float a){
+   noStroke();
+   fill(deeppink, a);
+   ellipse(x_, y_, 2*r, 2*r);
+   if( a > 15){
+     a *=0.80;
+     recurseFire(x_, y_+r, a);
+   }
   }
 }
-  
-//    for (int i = 0; i<5; i++) {
-//      noStroke();
-//      fill(deeppink, (255-i*50));
-//      ellipse(x, y+i*2*r, 2*r, 2*r);
-//    }
-//  }
-//} 
+ 

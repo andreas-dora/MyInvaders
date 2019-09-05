@@ -12,7 +12,7 @@ class Star{
   PVector accelaraion;
   
   Star(){
-   x = random(playGroundX, playGroundX+playGroundW);
+   x = random(playGroundX, playGroundX+height);
    y = random(-height, height);
    z = random(0.5, 4);
    r = random(1, 4); 
@@ -22,7 +22,7 @@ class Star{
    alpha = 40 * z;
   }
    Star(float y_){
-   x = random(playGroundX, playGroundX+playGroundW);
+   x = random(playGroundX, playGroundX+height);
    y = random(0, -height) - y_;
    z = random(0.5, 4);
    r = random(1, 4); 
