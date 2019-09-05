@@ -2,6 +2,9 @@ class Ship{
   float x;
   float y;
   float r;
+    PVector location;
+  PVector velocity;
+  PVector acceleration;
   float updateX;
   float explRad = 1;
   boolean isDead = false;
@@ -15,7 +18,9 @@ class Ship{
     y = y_;
     r = r_;
     c = c_;
-
+    location = new PVector(x,y);
+    velocity = new PVector(0,0);
+    acceleration = new PVector(0,0);
   }
 
   void upDate(float updateX_){

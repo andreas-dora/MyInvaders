@@ -7,28 +7,41 @@ class Alien {
   PVector location;
   PVector velocity;
   PVector acceleration;
+  PVector target;
   float topSpeed = 0.3;
-  float speed = 0.2;
-  float explRad = 1; //(ExplosionRAdius)
+  float explRad = 1;
+  float t_y;
   int tryToShoot;
   boolean isDead = false;
   boolean isAlive = true;
 
   PVector friendFireTest;
   
-  Alien(float x_, float y_, float r_, int alienT_){
+  Alien(float x_, float y_, float r_, int typ_){
     x = x_;
     y = y_;
     r = r_;
     location = new PVector(x,y);
     velocity = new PVector(0,0);
     acceleration = new PVector(0,0);
-    shipValue = (alienT_ + 1) * 100;
-    typ = alienT_;
+    target = new PVector(x, height);
+    shipValue = (typ_ + 1) * 100;
+    typ = typ_;
   }
-  //boolean clearRange(Alien friend){
-  //  float d = dist(location.x, friend.location.y, friend.location.x, friend.location.y); 
-  //   if (d < r) {
+  
+  boolean hasTarget(float temp_x, float temp_r){
+    float d = dist(temp_x, height, target.x, target.y);
+    if(d <  temp_r +3){
+      return true;
+    } else {
+      return false;
+    }
+  }
+      
+  
+  //boolean clearRange(Alien family){
+  //  float d = dist(target.x, target.y, family.target.x, family.target.y); 
+  //  if ((d < family.r + 3) && (family.location.y > location.y)){  //3 sollte
   //    return false;
   //  } else {
   //    return true;
@@ -45,6 +58,8 @@ class Alien {
   }
 
   
+  
+  
   boolean isShooting(int a_){
     tryToShoot = int(random(10*a_));
     if((tryToShoot < a_)&&(isAlive)) {
@@ -54,7 +69,10 @@ class Alien {
     }
   }
     
-
+  void shoot(){
+            alienFire.add(new Fire(location.x, location.y, 0.14, green));
+  
+  }
   
   void update(float acc_y){
     acceleration.y = acc_y;
@@ -119,4 +137,3 @@ class Alien {
     isAlive = false;
   } 
 }
-   

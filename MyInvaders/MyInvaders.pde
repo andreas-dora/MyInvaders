@@ -8,19 +8,21 @@
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 */
 
+Ship oneShip;
 
 ArrayList<Alien> alien;
-ArrayList<Ship> oneShip;
 ArrayList<Fire> oneFire;
+ArrayList<Fire> alienFire;
 ArrayList<Star> star;
 PFont arial;
 Timer timer;
 Timer fastTimer;
-
+Timer shootingTimer;
 color deeppink = #FF1493;
 color gold = #FFD700;
 color silver = #C0C0C0;
 color myOrange = color(255,50,10);
+color green = color(0, 200, 50);
 color alienColor[] = {#FF320A, #7CFC00, #00FFFF};
 
 
@@ -34,6 +36,8 @@ int playGroundH;
 int cols = 2;
 int rows = 7;
 int alienR;
+
+int shootingSpeed = 1000;
 
 
 int abstand;
@@ -52,6 +56,7 @@ int caseNumber;
 int firstStars = 50;
 int firstStarCounter;
 int level = 1;
+
 
 String punkteString;
 String message[] = {"Press any key to start", "Get ready"};
@@ -77,11 +82,11 @@ void setup(){
   
   abstand = floor(height/20);
 
-  oneShip = new ArrayList<Ship>();
-  oneShip.add(new Ship(shipR, height - 2*shipR, gold));
+  oneShip = new Ship(shipR, height - 2*shipR, gold);
   
   oneFire = new ArrayList<Fire>();
-  
+  alienFire = new ArrayList<Fire>();
+
   alien = new ArrayList<Alien>();
   for (int j = 0; j < cols+level; j++){
     for(int i = 0; i <rows-j; i++){
@@ -98,6 +103,7 @@ void setup(){
   timer.start();
   fastTimer = new Timer(100);
   fastTimer.start();
+  shootingTimer = new Timer(shootingSpeed);
 }
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
@@ -142,6 +148,7 @@ void draw(){
     level +=1;
     mySpeed = 0;
     caseNumber +=1;
+    shootingSpeed = round(shootingSpeed*=0.9);
     break;
     
     case 4:                //------------------ Next Level
@@ -185,14 +192,16 @@ void draw(){
   text("x/y: " + mouseX + " / " + mouseY, width-2*offset, abstand);
   text("oneFire: " + oneFire.size(), width-2*offset, 2*abstand);
   text("FirstStars: " + firstStarCounter, width-2*offset, 3*abstand);
-  text("CaseNumber: " + caseNumber, width-2*offset, 4*abstand);
-  text("countDown: " + countDown, width-2*offset, 5  *abstand);
+  text("CaseNumber: " + caseNumber, width-2*offset, 4*abstand);  
+  text("shootingSpeed: " + shootingSpeed, width-2*offset, 5  *abstand);
+  text("countDown: " + countDown, width-2*offset, 6  *abstand);
+
 //-----------------------------------------------------------------
 
 //----------------------------- BACKGROUND
   for(int i = star.size()-1; i >= 0; i--){
     Star sta = star.get(i);
-    sta.upDate(mouseX);
+    sta.upDate( );
     sta.display();
     if(sta.isDone){
       star.remove(i);
@@ -201,28 +210,32 @@ void draw(){
     }
   }
   
-  
+ 
+  oneShip.show(mouseX); 
+  if(stearingEnable){
+    oneShip.upDate(mouseX);
+  } else{ 
+    oneShip.upDate(width/2);
+  }
+ 
   for(Alien al : alien){
     al.update(mySpeed);
     al.show();
   }
-
-
-  for(Ship sh1 : oneShip){
-    sh1.show(mouseX);
-    if(stearingEnable){
-    sh1.upDate(mouseX);
-    } else {
-    sh1.upDate(width/2);
-    }
-  }
+  
  
   
   for(Fire fire1 : oneFire){
     fire1.upDate();
     fire1.show();
   }
-
+  
+  for(Fire afi : alienFire){
+    afi.upDate();
+    afi.show();
+  }
+  
+  
   for( int i = 0; i <alien.size(); i++){
     Alien aSh = alien.get(i);
     if(aSh.isDead){
@@ -258,7 +271,25 @@ void draw(){
   if(fastTimer.isFinished()){    
     fastTimer.start();
   }   
+
+
+  if(shootingTimer.isFinished()){
+    for( int i = 0; i <alien.size(); i++){
+      Alien aSh = alien.get(i);
+      //for( int j = 0; j <alien.size(); j++){
+      //  Alien jSh = alien.get(i);  
+        if((aSh.hasTarget(oneShip.x, oneShip.r))&&(fireEnable)){         //---------------||(aSh.clearRange(jSh))){
+          println("PENG");
+          aSh.shoot();
+        //}
+      }
+    }
+    shootingTimer.start();
+  }
+
+  
 }
+
 
 //-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------
@@ -270,11 +301,8 @@ void keyPressed(){
 
 void mousePressed(){
   println(playGroundX, playGroundX+height) ; 
-
   if(fireEnable){
-    for(Ship ship : oneShip){
-      oneFire.add(new Fire(ship.x));
-    }
+    oneFire.add(new Fire(oneShip.x, oneShip.y, -0.15, deeppink));
+  }
 }
   
-}

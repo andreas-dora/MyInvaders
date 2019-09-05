@@ -32,7 +32,7 @@ class Star{
    alpha = 30 * z;
   }
   
-  void upDate(float mx) {
+  void upDate() {
     y +=speed;
     if (y>height+r) {
       isDone = true;
