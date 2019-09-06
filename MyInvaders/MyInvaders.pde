@@ -55,7 +55,7 @@ int bonus;
 int countDown = 5;
 int caseNumber;
 int firstStars = 50;
-int firstStarCounter;
+//int firstStarCounter;
 
 
 
@@ -70,13 +70,12 @@ float mySpeed = 0;
 //------------------------------------------------------------------------------
 void setup(){
   size(1080, 640);
-  firstStarCounter = firstStars;
+  //firstStarCounter = firstStars;
   playGroundX = width/2 - height/2; 
 
   arial = createFont("Arial-Black", 36);
   alienR = floor(height/32);
   shipY = height - floor(height/16);
-  // 
   shipR = floor(height/30);
   println(shipR + "from Setup");
   
@@ -175,10 +174,8 @@ void draw(){
     if(timeBonus ==0){
       caseNumber = 1;
     }
-     messageBox(timeBonus);   
-   
+     messageBox(timeBonus);     
       countDown = 3;
-
     break;
              
     case 5:                          // -- -----------------Player Down
@@ -200,13 +197,9 @@ void draw(){
       } else {
         countDown = 3;
         caseNumber = 6;
-            
-      ///  }
-      
-    
     }
-
     break;
+    
     case 6:
     fireEnable = false;
     
@@ -216,11 +209,8 @@ void draw(){
         
         caseNumber = 0;
       }
-    }
-        
-      
-      messageBox(-1);   
-  
+    }  
+    messageBox(-1);   
     break;
   }
   
@@ -239,7 +229,7 @@ void draw(){
     sta.display();
     if(sta.isDone){
       star.remove(i);
-      firstStarCounter -=1;
+      //firstStarCounter -=1;
       star.add(new Star(height));
     }
   }
@@ -363,25 +353,22 @@ void display(color c){
   textAlign(LEFT,TOP);
   fill(c);
   text("PLAYER ONE ", 2*offset, 2*offset);
-    textFont(arial, 23);
-
+  textFont(arial, 23);
   text("LEVEL: " + level, tx, ty +zeile);
   text("SHIPS: "+nf(shipsOne, 2,0), tx, ty +2* zeile);
-
   text("SCORE: ", tx, ty +3* zeile);
   textAlign(RIGHT,TOP);
   text(nf(score, 6,0), width/2-height/2-offset, ty +3* zeile);
   textAlign(LEFT,TOP);
   text("TIMEBONUS: ", tx,ty +4* zeile);
-
-    textAlign(RIGHT,TOP);
+  textAlign(RIGHT,TOP);
   text(timeBonus, width/2-height/2-offset,ty +4* zeile);
 
 
   textAlign(RIGHT);
   text("x/y: " + mouseX + " / " + mouseY, width-2*offset, abstand);
   text("fire.size: " + oneFire.size() + " / " + alienFire.size(), width-2*offset, 2*abstand);
-  text("FirstStars: " + firstStarCounter, width-2*offset, 3*abstand);
+  //text("FirstStars: " + firstStarCounter, width-2*offset, 3*abstand);
   text("CaseNumber: " + caseNumber, width-2*offset, 4*abstand);  
   text("shootingSpeed: " + shootingSpeed, width-2*offset, 5  *abstand);
   text("countDown: " + countDown, width-2*offset, 6  *abstand);
