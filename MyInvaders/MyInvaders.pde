@@ -8,8 +8,12 @@
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 */
 
-Ship oneShip;
+// fire zusammenfügen
 
+
+
+//Ship oneShip;
+ArrayList<Ship> oneShip;
 ArrayList<Alien> alien;
 ArrayList<Fire> oneFire;
 ArrayList<Fire> alienFire;
@@ -81,7 +85,8 @@ void setup(){
   
   abstand = floor(height/20);
 
-  oneShip = new Ship(shipR, shipY, gold);
+  oneShip = new ArrayList<Ship>();
+  oneShip.add(new Ship(shipR, shipY, gold));
   
   oneFire = new ArrayList<Fire>();
   alienFire = new ArrayList<Fire>();
@@ -115,6 +120,8 @@ void draw(){
   
   switch (caseNumber){  
     case 0:                   //---------- has not begun
+    shipsOne = 3;
+    score = 0;
     fireEnable = false;
     stearingEnable = false; 
     messageBox(0);   
@@ -122,10 +129,7 @@ void draw(){
     break;
     
     case 1:  //-------- Countdown
-
     shipY = height - floor(height/16);
-    oneShip.isDead = false;
-    oneShip.isAlive = true;
     fireEnable = false;
     stearingEnable = true; 
     timeBonus = 100;
@@ -179,34 +183,25 @@ void draw(){
     break;
              
     case 5:                          // -- -----------------Player Down
-    fireEnable = false;
-    for(int i = alienFire.size()-1; i >= 0; i--){  
-    //  Fire fiA = alienFire.get(i);
-      alienFire.remove(i);
-    }
-        shipY = 800;
     mySpeed = 0.0;
     messageBox(-1);   
-
     if(timer.isFinished()){
       countDown-=1;
-    }
-    if((countDown == 0)&&(shipsOne > 0)){
+      }
+      if(countDown == 0){
+        oneShip.add(new Ship(shipR, shipY, gold));
         shipsOne -=1;
+        countDown =3;
         caseNumber =2;
-      } else {
         countDown = 3;
-        caseNumber = 6;
     }
     break;
     
     case 6:
     fireEnable = false;
-    
     if(timer.isFinished()){ 
       countDown-=1;
-      if( countDown ==0){
-        
+      if( countDown ==0){     
         caseNumber = 0;
       }
     }  
@@ -229,18 +224,19 @@ void draw(){
     sta.display();
     if(sta.isDone){
       star.remove(i);
-      //firstStarCounter -=1;
       star.add(new Star(height));
     }
   }
   
- 
-  oneShip.show(mouseX); 
+ for(Ship sh : oneShip){
+   
+  sh.show(mouseX); 
   if(stearingEnable){
-    oneShip.upDate(mouseX,shipY);
+    sh.upDate(mouseX,shipY);
   } else{ 
-    oneShip.upDate(width/2, shipY);
+    sh.upDate(width/2, shipY);
   }
+ }
  
  
  
@@ -261,15 +257,28 @@ void draw(){
     afi.show();
   }
   
-  for(int i = alienFire.size()-1; i >= 0; i--){  
-          Fire fiA = alienFire.get(i);
-
-      if(oneShip.intersec(fiA)){
-        alienFire.remove(i);
-        oneShip.explode();
-        caseNumber= 5;
-      }
+  for(int i = alienFire.size()-1; i >= 0; i--){  // --- PLAYER DOWN
+    Fire fiA = alienFire.get(i);
+    for(int j = 0; j <oneShip.size(); j ++){
+      Ship sh = oneShip.get(j);
+        if(sh.intersec(fiA)){
+          alienFire.remove(i);
+          fireEnable = false;
+          sh.explode();
+          oneShip.remove(j);
+          countDown = 3;
+          if(shipsOne > 0){
+          caseNumber= 5;
+          } else {
+          caseNumber= 6;
+        }
+      } 
+    }
   }
+  
+  
+  
+  
   for( int i = 0; i <alien.size(); i++){
     Alien aSh = alien.get(i);
     if(aSh.isDead){
@@ -280,8 +289,7 @@ void draw(){
         caseNumber = 3;
       }
     }
-
-    
+  
     for(int j = oneFire.size()-1; j >= 0; j--){
       Fire fire1 = oneFire.get(j);
       if(aSh.intersec(fire1)){
@@ -313,12 +321,11 @@ void draw(){
   if(shootingTimer.isFinished()){
     for( int i = 0; i <alien.size(); i++){
       Alien aSh = alien.get(i);
-      //for( int j = 0; j <alien.size(); j++){
-      //  Alien jSh = alien.get(i);  
-        if((aSh.hasTarget(oneShip.location.x, oneShip.r))&&(fireEnable)){         //---------------||(aSh.clearRange(jSh))){
-          println("PENG");
+      for( int j = 0; j < oneShip.size(); j ++){
+      Ship sh = oneShip.get(j);
+        if((aSh.hasTarget(sh.location.x, sh.r))&&(fireEnable)){         //---------------||(aSh.clearRange(jSh))){
           aSh.shoot();
-        //}
+        }
       }
     }
     shootingTimer.start();
@@ -336,8 +343,10 @@ void keyPressed(){
 
 void mousePressed(){
   println(playGroundX, playGroundX+height) ; 
+  for(Ship sh : oneShip){
   if(fireEnable){
-    oneFire.add(new Fire(oneShip.location.x, oneShip.location.y, -0.15, deeppink));
+    oneFire.add(new Fire(sh.location.x, sh.location.y, -0.15, deeppink));
+  }
   }
 }
   
@@ -372,4 +381,7 @@ void display(color c){
   text("CaseNumber: " + caseNumber, width-2*offset, 4*abstand);  
   text("shootingSpeed: " + shootingSpeed, width-2*offset, 5  *abstand);
   text("countDown: " + countDown, width-2*offset, 6  *abstand);
+    text("shipY: " + shipY, width-2*offset, 7  *abstand);
+
+  
 }

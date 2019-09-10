@@ -38,14 +38,7 @@ class Ship{
     location.add(velocity);
     location.x = constrain(location.x, playGroundX+r, playGroundX+height-r);
 
-    if(!isAlive){
-      if(explRad < 100){
-        explRad +=1;
-      } else {
-        isDead = true;
-        caseNumber = 5;
-      }
-    }
+
   }
   
   boolean intersec(Fire other) {
@@ -69,7 +62,7 @@ class Ship{
       antriebR = 150;
     }
       
-    if(isAlive){
+  //  if(isAlive){
 
      //for (int i = 0; i<8; i++) { // ---------- rechtes Triebwerk
      // noStroke(); 
@@ -96,11 +89,11 @@ class Ship{
       noStroke();
       
 
-    } else { 
+    //} else { 
  
-       recurseShip(r);
+    //   recurseShip(r);
 
-    }      
+    //}      
   }
 
 
@@ -116,7 +109,7 @@ class Ship{
    }
   }
     void explode(){
-    isAlive = false;
+  //  isAlive = false;
   } 
 }
     
