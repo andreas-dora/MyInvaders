@@ -11,6 +11,7 @@
 // fire zusammenfügen
 
 
+ArrayList<ParticleSystem> systems;
 
 //Ship oneShip;
 ArrayList<Ship> oneShip;
@@ -98,7 +99,8 @@ void setup(){
         alien.add(new Alien((width - ((2*alienR+abstand)*(rows-j)-(2*alienR+abstand)))/2 +(2*alienR+abstand)*i,2*offset+alienR-(2*alienR+abstand)*j, alienR, k));
     }
   }
-  
+    systems = new ArrayList<ParticleSystem>();
+
   star = new ArrayList<Star>();
   for(int i = 0; i < firstStars; i++){
     star.add(new Star());
@@ -117,7 +119,17 @@ void draw(){
   noStroke();
   fill(0,0,0);
   rect(playGroundX, 0, height, height);
-  
+        for (int i = systems.size()-1; i >= 0; i--) {
+      ParticleSystem ps = systems.get(i);
+    ps.run();
+    ps.addParticle(); 
+  //  }
+    if(ps.dead()){
+      systems.remove(i);
+    }
+  } 
+  fill(0);
+  text("click mouse to add particle systems",10,height-30);
   switch (caseNumber){  
     case 0:                   //---------- has not begun
     shipsOne = 3;
@@ -282,6 +294,8 @@ void draw(){
   for( int i = 0; i <alien.size(); i++){
     Alien aSh = alien.get(i);
     if(aSh.isDead){
+      explosion(aSh.location.x,aSh.location.y);
+ 
       score +=aSh.shipValue;
       alien.remove(i);
       if(alien.size() == 0){
@@ -342,6 +356,7 @@ void keyPressed(){
 }
 
 void mousePressed(){
+
   println(playGroundX, playGroundX+height) ; 
   for(Ship sh : oneShip){
   if(fireEnable){
@@ -384,4 +399,7 @@ void display(color c){
     text("shipY: " + shipY, width-2*offset, 7  *abstand);
 
   
+}
+void explosion(float tempX, float tempY){
+         systems.add(new ParticleSystem(1,new PVector(tempX,tempY)));
 }
