@@ -81,13 +81,13 @@ class Alien {
     location.add(velocity); 
     
 
-    if(!isAlive){
-      if(explRad < 3*r){
-        explRad +=1;
-      } else {
-        isDead = true;
-      }
-    }
+    //if(!isAlive){
+    //  if(explRad < 3*r){
+    //    explRad +=1;
+    //  } else {
+    //    isDead = true;
+    //  }
+    //}
   }
   
   
@@ -135,6 +135,6 @@ class Alien {
   }
   
   void explode(){
-    isAlive = false;
+    isDead = true;
   } 
 }

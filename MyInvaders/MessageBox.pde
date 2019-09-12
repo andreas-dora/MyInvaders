@@ -1,6 +1,7 @@
 void messageBox(int velue2){
   fill(0);
-  
+   rectMode(CORNER);
+ 
   int x = 300;
   int y = 200;
   int w = 500;

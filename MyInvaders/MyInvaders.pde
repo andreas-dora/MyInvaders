@@ -10,6 +10,7 @@
 
 // fire zusammenfügen
 
+import java.util.Iterator;
 
 ArrayList<ParticleSystem> systems;
 
@@ -74,6 +75,7 @@ float mySpeed = 0;
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 void setup(){
+  rectMode(CORNER);
   size(1080, 640);
   //firstStarCounter = firstStars;
   playGroundX = width/2 - height/2; 
@@ -119,15 +121,25 @@ void draw(){
   noStroke();
   fill(0,0,0);
   rect(playGroundX, 0, height, height);
-        for (int i = systems.size()-1; i >= 0; i--) {
-      ParticleSystem ps = systems.get(i);
+   Iterator<ParticleSystem> it = systems.iterator();
+  while (it.hasNext()) {
+    ParticleSystem ps = it.next();
     ps.run();
     ps.addParticle(); 
-  //  }
-    if(ps.dead()){
-      systems.remove(i);
-    }
+    if(ps.isDone()){
+      it.remove();
+    }    
   } 
+        
+  //      for (int i = systems.size()-1; i >= 0; i--) {
+  //  ParticleSystem ps = systems.get(i);
+  //  ps.run();
+  //  ps.addParticle(); 
+  ////  }
+  //  if(ps.dead()){
+  //    systems.remove(i);
+  //  }
+  //} 
   fill(0);
   text("click mouse to add particle systems",10,height-30);
   switch (caseNumber){  
@@ -315,13 +327,7 @@ void draw(){
     }
   }
   } 
-  //for(int i = oneFire.size()-1; i >= 0; i--){
-  //  Fire fire1 = oneFire.get(i);
-  //  if(fire1.isDone){
-  //    oneFire.remove(i);
-  //  }
-  //}
-
+  
   
  
   if(timer.isFinished()){    
@@ -366,6 +372,8 @@ void mousePressed(){
 }
   
 void display(color c){
+    rectMode(CORNER);
+
   int tx = 2*offset;
   int ty =4 *offset;
   int zeile = 30;
@@ -401,5 +409,5 @@ void display(color c){
   
 }
 void explosion(float tempX, float tempY){
-         systems.add(new ParticleSystem(1,new PVector(tempX,tempY)));
+         systems.add(new ParticleSystem(new PVector(tempX,tempY)));
 }

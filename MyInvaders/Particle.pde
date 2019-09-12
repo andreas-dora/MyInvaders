@@ -3,18 +3,22 @@ class Particle {
   PVector velocity;
   PVector acceleration;
   float lifespan;
-  float r;
+  float r = 255;
   float g;
+  float b = 0;
   float rad;
+  float w;
+  float greenMinus;
 
-  Particle(PVector l) {
+  Particle(PVector tempVector) {
     acceleration = new PVector(0,0);
-    velocity = new PVector(random(-3,3),random(-3,3));
-    position = l.get();
+    velocity = new PVector(random(-1,1),random(-1,1));
+    position = tempVector.copy();
     lifespan = 255.0;
-    r = 255.0;
     g = 200.0;
-    rad = random(6,16);
+    rad = random(2,8);
+    w = random(2,8);
+    greenMinus = random(1.5, 3.0);
   }
 
   void run() {
@@ -22,20 +26,15 @@ class Particle {
     display();
   }
 
-  // Method to update position
-  void update() {
+  void update(){
     velocity.add(acceleration);
     position.add(velocity);
-    lifespan -= 1.5;
-    r -=1;
-    g -=2;
-    
+    lifespan -= 2;
+    g -=greenMinus;   
   }
 
-  // Method to display
   void display() {
-
-    fill(r,g,0,lifespan);
+    fill(r,g,b,lifespan);
     ellipse(position.x,position.y,rad,rad);
   }
   
