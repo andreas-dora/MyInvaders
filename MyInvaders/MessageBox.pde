@@ -7,74 +7,47 @@ void messageBox(int velue2){
   int w = 500;
   int h = 300;
   String zeile1 = "";
-  String zeile2 = "";
   
 
 
   switch (caseNumber){  
     case 0: //---- has not begun
     zeile1 = "PRESS ANY KEY TO START";
-    zeile2 = "";
     break;
     
     case 1: //-------- Countdown
     zeile1 = "GET READY!";
-    zeile2 = "";
+  text(velue2 , x+w/2, y+h/2+30); 
    
     break;
     
     case 2: //------------ Running
     zeile1 = "";
-    zeile2 = "";
             
     break; 
     
     case 4: //------------------ Level Complete
     zeile1 = "LEVEL COMPLETE";
-    zeile2 = "";
+  text(velue2 , x+w/2, y+h/2+30); 
      
-            // ALles Feuer wird Rückwerts gelöscht
-            // Feuer deaktiviert
-            // Lenkung bleibt aktiv;
-            // Bonus Sekunden werden gut geschrieben
-            // Level += 1;
-            // weiter zu case 1 (Countdown);
             
      break;  
       case 5: //------------------ Level Complete
     zeile1 = "ARE YOU BLIND?";
-    zeile2 = "";
-     
-            // ALles Feuer wird Rückwerts gelöscht
-            // Feuer deaktiviert
-            // Lenkung bleibt aktiv;
-            // Bonus Sekunden werden gut geschrieben
-            // Level += 1;
-            // weiter zu case 1 (Countdown);
-            
+ 
      break;
-        case 6: //------------------ Level Complete
-    zeile1 = "GAME OVER";
-    zeile2 = "";
      
-            // ALles Feuer wird Rückwerts gelöscht
-            // Feuer deaktiviert
-            // Lenkung bleibt aktiv;
-            // Bonus Sekunden werden gut geschrieben
-            // Level += 1;
-            // weiter zu case 1 (Countdown);
+      case 6: //------------------ Level Complete
+    zeile1 = "GAME OVER";
+
             
      break;
   }
 
-    strokeWeight(10);
-  stroke(myOrange);
-  rect(300,200, w, h);
   textFont(arial, 36);
-  textAlign(CENTER,CENTER);
-  fill(myOrange);
+  textAlign(CENTER,CENTER -80);
+  fill(goldenRod);
   text(zeile1, x+w/2, y+h/2); 
-  text(zeile2+  " " + velue2 , x+w/2, y+h/2+30); 
   
   
 }

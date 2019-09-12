@@ -95,8 +95,8 @@ class Alien {
 
     stroke(alienColor[typ]);  
     if(isAlive){
-      strokeWeight(2);
-      fill(80);
+      strokeWeight(3);
+      fill(0);
       ellipse(location.x, location.y, 2*r, 2*r);
       textFont(arial, 12);
 

@@ -14,7 +14,6 @@ import java.util.Iterator;
 
 ArrayList<ParticleSystem> systems;
 
-//Ship oneShip;
 ArrayList<Ship> oneShip;
 ArrayList<Alien> alien;
 ArrayList<Fire> oneFire;
@@ -252,7 +251,7 @@ void draw(){
     }
   }
   
- for(Ship sh : oneShip){
+ for(Ship sh : oneShip){   //---oneShip
    
   sh.show(mouseX); 
   if(stearingEnable){
@@ -264,25 +263,27 @@ void draw(){
  
  
  
-  for(Alien al : alien){
-    al.update(mySpeed);
-    al.show();
-  }
+  //for(Alien al : alien){    // alien
+  //  al.update(mySpeed);
+  //  al.show();
+  //}
   
  
   
-  for(Fire fire1 : oneFire){
+  for(Fire fire1 : oneFire){ // one Fire
     fire1.upDate();
     fire1.show();
   }
   
-  for(Fire afi : alienFire){
-    afi.upDate();
-    afi.show();
-  }
+  //for(Fire afi : alienFire){ // alien Fire
+  //  afi.upDate();
+  //  afi.show();
+  //}
   
   for(int i = alienFire.size()-1; i >= 0; i--){  // --- PLAYER DOWN
     Fire fiA = alienFire.get(i);
+    fiA.upDate();
+    fiA.show();
     for(int j = 0; j <oneShip.size(); j ++){
       Ship sh = oneShip.get(j);
         if(sh.intersec(fiA)){
@@ -300,11 +301,11 @@ void draw(){
     }
   }
   
-  
-  
-  
+
   for( int i = 0; i <alien.size(); i++){
     Alien aSh = alien.get(i);
+    aSh.update(mySpeed);
+    aSh.show();
     if(aSh.isDead){
       explosion(aSh.location.x,aSh.location.y);
  
@@ -362,8 +363,10 @@ void keyPressed(){
 }
 
 void mousePressed(){
-
-  println(playGroundX, playGroundX+height) ; 
+ if(caseNumber == 0){
+   caseNumber = 1;
+ }
+//  println(playGroundX, playGroundX+height) ; 
   for(Ship sh : oneShip){
   if(fireEnable){
     oneFire.add(new Fire(sh.location.x, sh.location.y, -0.15, deeppink));
@@ -397,14 +400,14 @@ void display(color c){
   text(timeBonus, width/2-height/2-offset,ty +4* zeile);
 
 
-  textAlign(RIGHT);
-  text("x/y: " + mouseX + " / " + mouseY, width-2*offset, abstand);
-  text("fire.size: " + oneFire.size() + " / " + alienFire.size(), width-2*offset, 2*abstand);
-  //text("FirstStars: " + firstStarCounter, width-2*offset, 3*abstand);
-  text("CaseNumber: " + caseNumber, width-2*offset, 4*abstand);  
-  text("shootingSpeed: " + shootingSpeed, width-2*offset, 5  *abstand);
-  text("countDown: " + countDown, width-2*offset, 6  *abstand);
-    text("shipY: " + shipY, width-2*offset, 7  *abstand);
+//  textAlign(RIGHT);
+//  text("x/y: " + mouseX + " / " + mouseY, width-2*offset, abstand);
+//  text("fire.size: " + oneFire.size() + " / " + alienFire.size(), width-2*offset, 2*abstand);
+//  //text("FirstStars: " + firstStarCounter, width-2*offset, 3*abstand);
+//  text("CaseNumber: " + caseNumber, width-2*offset, 4*abstand);  
+//  text("shootingSpeed: " + shootingSpeed, width-2*offset, 5  *abstand);
+//  text("countDown: " + countDown, width-2*offset, 6  *abstand);
+//    text("shipY: " + shipY, width-2*offset, 7  *abstand);
 
   
 }
